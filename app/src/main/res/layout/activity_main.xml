@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical">
+        <!--登陆用户名输入控件-->
+        <EditText
+            android:id="@+id/Id_et"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="用户名">
+
+        </EditText>
+        <!--登陆密码输入控件-->
+        <EditText
+            android:id="@+id/Password_et"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="密码"
+            android:inputType="textPassword">
+
+        </EditText>
+
+    </LinearLayout>
+
+    <!--登录确认按钮-->
+    <Button
+        android:id="@+id/Start_btn"
+        android:layout_width="match_parent"
+        android:text="登陆"
+        android:layout_height="50dp">
+    </Button>
+
+    <!--创建账号按钮-->
+    <Button
+        android:id="@+id/CreateAccount_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="创建账号">
+    </Button>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </LinearLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
