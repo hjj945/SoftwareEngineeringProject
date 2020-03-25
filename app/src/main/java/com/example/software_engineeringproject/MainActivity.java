@@ -4,12 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
     //各控件初始化
@@ -28,10 +34,6 @@ public class MainActivity extends AppCompatActivity {
         Id_et=(EditText)findViewById(R.id.Id_et);
         Password_et=(EditText)findViewById(R.id.Password_et);
 
-        //socket功能测试代码
-
-        //socket功能测试结束
-
         //点击创建用户按钮后跳转至创建用户界面
         CreateAccount_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,13 +46,44 @@ public class MainActivity extends AppCompatActivity {
         Start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            UdpTest udptest=new UdpTest();
-            udptest.get_message("hello!");
-                try {
-                    udptest.send_message();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new Thread() {
+                    public void run(){
+                        super.run();
+                        try {
+                            //1.创建监听指定服务器地址以及指定服务器监听的端口号
+                            Log.e("socket", "start sending message");
+                            Socket socket = new Socket("84.32.16.105", 12345);
+                            //2.拿到客户端的socket对象的输出流发送给服务器数据
+                            OutputStream os = socket.getOutputStream();
+                            //写入要发送给服务器的数据
+                            os.write("Udp_Message".getBytes());
+                            os.flush();
+                            socket.shutdownOutput();
+                            //拿到socket的输入流，这里存储的是服务器返回的数据
+                            InputStream is = socket.getInputStream();
+                            //解析服务器返回的数据
+                            InputStreamReader reader = new InputStreamReader(is);
+                            BufferedReader bufReader = new BufferedReader(reader);
+                            String s = null;
+                            final StringBuffer sb = new StringBuffer();
+                            while((s = bufReader.readLine()) != null){
+                                sb.append(s);
+                            }
+                            Log.e("socket", sb.toString());
+                            //3、关闭IO资源（注：实际开发中需要放到finally中）
+                            bufReader.close();
+                            reader.close();
+                            is.close();
+                            os.close();
+                            socket.close();
+                            Log.e("socket", "finish sending message");
+                        } catch (UnknownHostException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
             }
         });
 
