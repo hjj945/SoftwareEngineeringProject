@@ -4,10 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,9 +28,12 @@ public class MainActivity extends AppCompatActivity {
     private EditText Id_et;
     private EditText Password_et;
 
-    private  Socket socket;
+    private String Id;
+    private String Password;
+    private String Message;
+
+    private Socket socket;
     private OutputStream os;
-    private StringBuffer sb;
     private InputStream is;
     private BufferedReader bufReader;
     private InputStreamReader reader;
@@ -47,12 +54,9 @@ public class MainActivity extends AppCompatActivity {
             public void run(){
                 super.run();
                 try {
-                    //1.创建监听指定服务器地址以及指定服务器监听的端口号
                     Log.e("socket", "start sending message");
                     socket = new Socket("84.32.16.105", 12345);
                     os = socket.getOutputStream();
-                    //2.拿到客户端的socket对象的输出流发送给服务器数据
-                    //OutputStream os = socket.getOutputStream();
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }.start();
+
 
 
         //点击创建用户按钮后跳转至创建用户界面
@@ -71,6 +76,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Id_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s!=null)
+                    Id=s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        Password_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s!=null)
+                    Password=s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         Start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,20 +120,19 @@ public class MainActivity extends AppCompatActivity {
                         super.run();
                         try {
                             Log.e("socket","sending message");
-                            os.write("Udp_Message".getBytes());
+                            Message="{id:"+Id+",password:"+Password+"}";
+                            os.write(Message.getBytes());
                             os.flush();
-                            /*
                             //拿到socket的输入流，这里存储的是服务器返回的数据
                             is = socket.getInputStream();
                             //解析服务器返回的数据
                             reader = new InputStreamReader(is);
                             bufReader = new BufferedReader(reader);
                             s = null;
-                            sb = new StringBuffer();
                             while((s = bufReader.readLine()) != null){
-                                sb.append(s);
+                                Log.e("socket", s.toString());
                             }
-                             */
+
                             /*
                             //1.创建监听指定服务器地址以及指定服务器监听的端口号
                             Log.e("socket", "start sending message");
@@ -114,13 +154,6 @@ public class MainActivity extends AppCompatActivity {
                                 sb.append(s);
                             }
                             Log.e("socket", sb.toString());
-                            //3、关闭IO资源（注：实际开发中需要放到finally中）
-                            bufReader.close();
-                            reader.close();
-                            is.close();
-                            os.close();
-                            socket.close();
-                            Log.e("socket", "finish sending message");
                              */
                         } catch (UnknownHostException e) {
                             e.printStackTrace();
@@ -152,24 +185,40 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        new Thread(){
+            public void run(){
+                super.run();
+                try {
+                    os.write("Finish".getBytes());
+                    os.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("socket", "finish sending message");
-        //3、关闭IO资源（注：实际开发中需要放到finally中）
-        try {
-            /*
-            bufReader.close();
-            reader.close();
-            is.close();
-            */
-            socket.shutdownOutput();
-            os.close();
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Thread(){
+            public void run(){
+                super.run();
+                Log.e("socket", "finish sending message");
+                //3、关闭IO资源（注：实际开发中需要放到finally中）
+                try {
+                    bufReader.close();
+                    reader.close();
+                    is.close();
+                    Thread.sleep(50);
+                    socket.shutdownOutput();
+                    os.close();
+                    socket.close();
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+
     }
 }
