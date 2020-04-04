@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,11 +29,11 @@ public class MainActivity extends AppCompatActivity {
     private Button CreateAccount_btn;
     private EditText Id_et;
     private EditText Password_et;
-
+    //账号，密码
     private String Id;
     private String Password;
     private String Message;
-
+    //socket初始化
     private Socket socket;
     private OutputStream os;
     private InputStream is;
@@ -54,9 +56,21 @@ public class MainActivity extends AppCompatActivity {
             public void run(){
                 super.run();
                 try {
+                    Looper.prepare();
                     Log.e("socket", "start sending message");
                     socket = new Socket("84.32.16.105", 12345);
                     os = socket.getOutputStream();
+                    is = socket.getInputStream();
+                    //解析服务器返回的数据
+                    reader = new InputStreamReader(is);
+                    bufReader = new BufferedReader(reader);
+                    s = null;
+                    Toast.makeText(getApplicationContext(),"12345",Toast.LENGTH_SHORT).show();
+                    while((s = bufReader.readLine()) != null) {
+                        Log.e("socket", s);
+                        //Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+                    }
+                    Looper.loop();
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -64,9 +78,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }.start();
-
-
-
         //点击创建用户按钮后跳转至创建用户界面
         CreateAccount_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             os.write(Message.getBytes());
                             os.flush();
                             //拿到socket的输入流，这里存储的是服务器返回的数据
+                            /*
                             is = socket.getInputStream();
                             //解析服务器返回的数据
                             reader = new InputStreamReader(is);
@@ -132,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                             while((s = bufReader.readLine()) != null){
                                 Log.e("socket", s.toString());
                             }
-
+                             */
                             /*
                             //1.创建监听指定服务器地址以及指定服务器监听的端口号
                             Log.e("socket", "start sending message");
@@ -185,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        /*
         new Thread(){
             public void run(){
                 super.run();
@@ -195,7 +208,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }.start();
+        }.start();s
+         */
     }
 
     @Override
@@ -205,16 +219,18 @@ public class MainActivity extends AppCompatActivity {
             public void run(){
                 super.run();
                 Log.e("socket", "finish sending message");
-                //3、关闭IO资源（注：实际开发中需要放到finally中）
+                //关闭IO资源
                 try {
+                    os.write("Finish".getBytes());
+                    os.flush();
+
                     bufReader.close();
                     reader.close();
                     is.close();
-                    Thread.sleep(50);
-                    socket.shutdownOutput();
                     os.close();
+                    //socket.shutdownOutput();
                     socket.close();
-                } catch (IOException | InterruptedException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
