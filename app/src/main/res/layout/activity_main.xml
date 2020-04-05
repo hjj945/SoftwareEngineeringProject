@@ -47,7 +47,7 @@
 
     <!--创建账号按钮-->
     <Button
-        android:id="@+id/CreateAccount_btn"
+        android:id="@+id/to_CreateAccount_btn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="创建账号">
