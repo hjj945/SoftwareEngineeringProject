@@ -15,10 +15,12 @@ public class CreateAccountActivity extends AppCompatActivity {
     Button back_to_mainActivity_btn;
     Button CreateAccount_btn;
     EditText create_account_id_et;
-    EditText getCreate_account_password_et;
+    EditText Create_account_password_et;
+    EditText Create_account_password_confirm_et;
 
     String id;
     String password;
+    String password_confirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         back_to_mainActivity_btn=(Button)findViewById(R.id.back_to_mainActivity_btn);
         CreateAccount_btn=(Button)findViewById(R.id.CreateAccount_btn);
         create_account_id_et=(EditText)findViewById(R.id.create_account_id_et);
-        getCreate_account_password_et=(EditText)findViewById(R.id.create_account_password_et);
+        Create_account_password_et=(EditText)findViewById(R.id.create_account_password_et);
+        Create_account_password_confirm_et=(EditText)findViewById(R.id.create_account_password_confirm_et);
 
         back_to_mainActivity_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +65,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
         });
 
-        getCreate_account_password_et.addTextChangedListener(new TextWatcher() {
+        Create_account_password_et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -78,5 +81,23 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             }
         });
+
+        Create_account_password_confirm_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                password_confirm=s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 }

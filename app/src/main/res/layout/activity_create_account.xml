@@ -21,13 +21,25 @@
         <EditText
             android:id="@+id/create_account_id_et"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:singleLine="true"
+            android:hint="用户名">
         </EditText>
 
         <EditText
             android:id="@+id/create_account_password_et"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:hint="密码"
+            android:inputType="textPassword">
+        </EditText>
+
+        <EditText
+            android:id="@+id/create_account_password_confirm_et"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="确认密码"
+            android:inputType="textPassword">
         </EditText>
 
         <Button
