@@ -18,12 +18,8 @@ public class mySocket {
     private InputStreamReader reader;
     private String s;
 
-    //private String address;
-    //private int port;
     public mySocket(final String address, final int port)
     {
-        //this.address=address;
-        //this.port=port;
         new Thread() {
             public void run(){
                 super.run();
@@ -59,6 +55,10 @@ public class mySocket {
                 }
             }
         }.start();
+    }
+
+    public InputStream receive_msg(){
+        return is;
     }
 
     public void finish_sending(){
