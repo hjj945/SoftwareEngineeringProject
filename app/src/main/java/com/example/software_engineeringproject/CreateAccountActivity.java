@@ -22,6 +22,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     String password;
     String password_confirm;
 
+    mySocket mysocket;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,18 +35,24 @@ public class CreateAccountActivity extends AppCompatActivity {
         Create_account_password_et=(EditText)findViewById(R.id.create_account_password_et);
         Create_account_password_confirm_et=(EditText)findViewById(R.id.create_account_password_confirm_et);
 
+        //mysocket=new mySocket("84.32.16.105",12345);
+
         back_to_mainActivity_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 Intent intent=new Intent(CreateAccountActivity.this,MainActivity.class);
                 startActivity(intent);
+
+                 */
+                mysocket=new mySocket("84.32.16.105",12345);
             }
         });
 
         CreateAccount_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mysocket.send_msg("123456");
             }
         });
 
@@ -98,6 +106,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mysocket.finish_sending();
     }
 }

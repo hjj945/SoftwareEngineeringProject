@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                     reader.close();
                     is.close();
                     os.close();
-                    //socket.shutdownOutput();
+                    socket.shutdownOutput();
                     socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
