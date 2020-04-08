@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                         super.run();
                         try {
                             Log.e("socket","sending message");
-                            Message="{id:"+Id+",password:"+Password+"}";
+                            Message="{'ID':'"+Id+"','PASSWD':'"+Password+"'}";
                             os.write(Message.getBytes());
                             os.flush();
                         } catch (UnknownHostException e) {
