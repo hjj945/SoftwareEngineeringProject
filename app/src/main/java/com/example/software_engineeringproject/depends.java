@@ -18,6 +18,10 @@ import org.json.JSONObject;
  *************************************************************************************/
 
 public class depends {
+    public depends(){
+
+    }
+
     public String Create_msg_for_client(int function_num,String type,String id, String target_id,String data) throws JSONException {
         JSONObject msg=new JSONObject();
         msg.put("function_num",function_num);

@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONException;
+
 public class CreateAccountActivity extends AppCompatActivity {
 
     Button back_to_mainActivity_btn;
@@ -35,24 +37,30 @@ public class CreateAccountActivity extends AppCompatActivity {
         Create_account_password_et=(EditText)findViewById(R.id.create_account_password_et);
         Create_account_password_confirm_et=(EditText)findViewById(R.id.create_account_password_confirm_et);
 
-        //mysocket=new mySocket("84.32.16.105",12345);
+        mysocket=new mySocket("84.32.16.105",12345);
 
         back_to_mainActivity_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
                 Intent intent=new Intent(CreateAccountActivity.this,MainActivity.class);
                 startActivity(intent);
-
-                 */
-                mysocket=new mySocket("84.32.16.105",12345);
             }
         });
 
         CreateAccount_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mysocket.send_msg("123456");
+                String message="";
+                depends dp=new depends();
+                if(true/*password!=null&&password==password_confirm*/){
+                    try {
+                        message=dp.Create_msg_for_client(1,"create_account",id,null,password);
+                        mysocket.send_msg(message);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
         });
 
