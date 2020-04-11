@@ -6,11 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -38,6 +44,24 @@ public class CreateAccountActivity extends AppCompatActivity {
         Create_account_password_confirm_et=(EditText)findViewById(R.id.create_account_password_confirm_et);
 
         mysocket=new mySocket("84.32.16.105",12345);
+        mysocket.receive_msg();
+/*
+        new Thread(){
+            public void run(){
+                super.run();
+                try {
+                    reader = new InputStreamReader(is);
+                    bufReader = new BufferedReader(reader);
+                    s = null;
+                    while((s = bufReader.readLine()) != null) {
+                        Log.e("socket", s);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+ */
 
         back_to_mainActivity_btn.setOnClickListener(new View.OnClickListener() {
             @Override
