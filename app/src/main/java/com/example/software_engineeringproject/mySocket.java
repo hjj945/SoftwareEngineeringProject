@@ -33,13 +33,13 @@ public class mySocket {
     private InputStreamReader reader;
     private String s;
 
-    public mySocket(final String address, final int port)
+    public mySocket()
     {
         new Thread() {
             public void run(){
                 super.run();
                 try{
-                    socket = new Socket(address, port);
+                    socket = new Socket("84.32.16.105",12345);
                     Log.e("socket","socket created");
                     os = socket.getOutputStream();
                 } catch (Exception e) {
