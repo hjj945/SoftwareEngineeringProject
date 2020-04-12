@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -30,6 +32,11 @@ public class CreateAccountActivity extends AppCompatActivity {
     String password;
     String password_confirm;
 
+    BufferedReader bufReader;
+    InputStreamReader reader;
+    String s;
+    InputStream is;
+
     mySocket mysocket;
 
     @Override
@@ -44,24 +51,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         Create_account_password_confirm_et=(EditText)findViewById(R.id.create_account_password_confirm_et);
 
         mysocket=new mySocket("84.32.16.105",12345);
-        mysocket.receive_msg();
-/*
-        new Thread(){
-            public void run(){
-                super.run();
-                try {
-                    reader = new InputStreamReader(is);
-                    bufReader = new BufferedReader(reader);
-                    s = null;
-                    while((s = bufReader.readLine()) != null) {
-                        Log.e("socket", s);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
- */
 
         back_to_mainActivity_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +73,30 @@ public class CreateAccountActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-
+                new Thread(){
+                    public void run(){
+                        super.run();
+                        Looper.prepare();
+                        try{
+                            is=mysocket.receive_msg();
+                            //解析服务器返回的数据
+                            reader = new InputStreamReader(is);
+                            bufReader = new BufferedReader(reader);
+                            s = null;
+                            while((s = bufReader.readLine()) != null) {
+                                Log.e("socket", s);
+                                if(s=="0"){
+                                    Toast.makeText(getApplicationContext(),"用户已经存在!",Toast.LENGTH_SHORT).show();
+                                }else if(s=="1"){
+                                    Toast.makeText(getApplicationContext(),"用户创建成功!",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Looper.loop();
+                    }
+                }.start();
             }
         });
 

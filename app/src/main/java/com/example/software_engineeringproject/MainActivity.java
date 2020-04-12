@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private InputStreamReader reader;
     private String s;
 
+    private depends dp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         to_CreateAccount_btn=(Button)findViewById(R.id.to_CreateAccount_btn);
         Id_et=(EditText)findViewById(R.id.Id_et);
         Password_et=(EditText)findViewById(R.id.Password_et);
+
+        dp=new depends();
 
         //socket测试
         new Thread() {
@@ -68,14 +74,20 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"12345",Toast.LENGTH_SHORT).show();
                     while((s = bufReader.readLine()) != null) {
                         Log.e("socket", s);
-                        //Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+                        if(s=="0"){
+                            Toast.makeText(getApplicationContext(),"用户不存在或密码错误!",Toast.LENGTH_SHORT).show();
+                        }else if(s=="1"){
+                            Toast.makeText(getApplicationContext(),"登陆成功!",Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(MainActivity.this,UserActivity.class);
+                            startActivity(intent);
+                        }
                     }
-                    Looper.loop();
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                Looper.loop();
             }
         }.start();
 
@@ -132,12 +144,14 @@ public class MainActivity extends AppCompatActivity {
                         super.run();
                         try {
                             Log.e("socket","sending message");
-                            Message="{'ID':'"+Id+"','PASSWD':'"+Password+"'}";
+                            Message=dp.Create_msg_for_client(1,"login_in",Id,null,Password);
                             os.write(Message.getBytes());
                             os.flush();
                         } catch (UnknownHostException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
@@ -165,19 +179,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        /*
-        new Thread(){
-            public void run(){
-                super.run();
-                try {
-                    os.write("Finish".getBytes());
-                    os.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-         */
     }
 
     @Override
