@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.software_engineeringproject.fragment.FragmentTestActivity;
+
 import org.json.JSONException;
 
 import java.io.BufferedReader;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     //各控件初始化
     private Button Start_btn;
     private Button to_CreateAccount_btn;
+    private Button test_btn;
     private EditText Id_et;
     private EditText Password_et;
     //账号，密码
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        test_btn=(Button)findViewById(R.id.test_btn);
         Start_btn=(Button)findViewById(R.id.Start_btn);
         to_CreateAccount_btn=(Button)findViewById(R.id.to_CreateAccount_btn);
         Id_et=(EditText)findViewById(R.id.Id_et);
@@ -62,34 +66,25 @@ public class MainActivity extends AppCompatActivity {
             public void run(){
                 super.run();
                 try {
-                    Looper.prepare();
                     Log.e("socket", "start sending message");
                     socket = new Socket("84.32.16.105", 12345);
                     os = socket.getOutputStream();
-                    is = socket.getInputStream();
-                    //解析服务器返回的数据
-                    reader = new InputStreamReader(is);
-                    bufReader = new BufferedReader(reader);
-                    s = null;
-                    Toast.makeText(getApplicationContext(),"12345",Toast.LENGTH_SHORT).show();
-                    while((s = bufReader.readLine()) != null) {
-                        Log.e("socket", s);
-                        if(s=="0"){
-                            Toast.makeText(getApplicationContext(),"用户不存在或密码错误!",Toast.LENGTH_SHORT).show();
-                        }else if(s=="1"){
-                            Toast.makeText(getApplicationContext(),"登陆成功!",Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(MainActivity.this,UserActivity.class);
-                            startActivity(intent);
-                        }
-                    }
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Looper.loop();
             }
         }.start();
+
+        //Fragment测试界面
+        test_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this, FragmentTestActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //点击创建用户按钮后跳转至创建用户界面
         to_CreateAccount_btn.setOnClickListener(new View.OnClickListener() {
@@ -139,14 +134,33 @@ public class MainActivity extends AppCompatActivity {
         Start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,UserActivity.class);
+                startActivity(intent);
+                /*
                 new Thread() {
                     public void run(){
                         super.run();
+                        Looper.prepare();
                         try {
                             Log.e("socket","sending message");
                             Message=dp.Create_msg_for_client(1,"login_in",Id,null,Password);
                             os.write(Message.getBytes());
                             os.flush();
+                            is = socket.getInputStream();
+                            //解析服务器返回的数据
+                            reader = new InputStreamReader(is);
+                            bufReader = new BufferedReader(reader);
+                            s = null;
+                            while((s = bufReader.readLine()) != null) {
+                                Log.e("socket", s);
+                                if(s=="00"){
+                                    //Toast.makeText(getApplicationContext(),"用户不存在或密码错误!",Toast.LENGTH_SHORT).show();
+                                }else if(s=="01"){
+                                    //Toast.makeText(getApplicationContext(),"登陆成功!",Toast.LENGTH_SHORT).show();
+                                    Intent intent=new Intent(MainActivity.this,UserActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
                         } catch (UnknownHostException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
@@ -154,8 +168,11 @@ public class MainActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        Looper.loop();
                     }
                 }.start();
+
+                 */
             }
         });
 
