@@ -3,6 +3,8 @@
     package="com.example.software_engineeringproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -13,7 +15,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".fragment.FragmentTestActivity"/>
         <activity android:name=".fragment.Fragment_test1"/>
-        <activity android:name=".fragment.Fragment_test2"/>
+        <activity android:name=".fragment.Fragment_Message"/>
+        <activity android:name=".fragment.Fragment_Contacts"/>
+        <activity android:name=".fragment.Fragment_Functions"/>
         <activity android:name=".UserActivity" />
         <activity android:name=".CreateAccountActivity" />
         <activity android:name=".MainActivity">

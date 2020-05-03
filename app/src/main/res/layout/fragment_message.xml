@@ -4,35 +4,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/fragment_message_tv1"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-    </LinearLayout>
+        android:layout_height="100dp">
+    </TextView>
 
     <TextView
-        android:id="@+id/test1_tv"
+        android:id="@+id/fragment_message_tv2"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:textSize="30sp">
+        android:layout_height="300dp">
     </TextView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_height="50dp">
 
         <EditText
-            android:id="@+id/test1_et"
-            android:layout_width="370dp"
-            android:layout_height="50dp">
+            android:id="@+id/fragment_message_et"
+            android:layout_width="360dp"
+            android:layout_height="match_parent">
         </EditText>
 
         <Button
-            android:id="@+id/sendMsg_btn"
+            android:id="@+id/fragment_message_btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="send"
-            android:textSize="5sp">
+            android:layout_height="match_parent">
         </Button>
 
     </LinearLayout>
