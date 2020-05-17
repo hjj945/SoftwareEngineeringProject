@@ -33,10 +33,6 @@ public class depends {
         return s;
     }
 
-    public String Get_info_from_message(String message,String item){
-        String s="";
-        return s;
-    }
 }
 
 

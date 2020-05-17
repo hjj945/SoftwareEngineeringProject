@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this, UserActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("id","123456");
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -158,6 +161,9 @@ public class MainActivity extends AppCompatActivity {
                                 }else if(s=="01"){
                                     //Toast.makeText(getApplicationContext(),"登陆成功!",Toast.LENGTH_SHORT).show();
                                     Intent intent=new Intent(MainActivity.this,UserActivity.class);
+                                    Bundle bundle=new Bundle();
+                                    bundle.putString("id",Id);
+                                    intent.putExtras(bundle);
                                     startActivity(intent);
                                 }
                             }

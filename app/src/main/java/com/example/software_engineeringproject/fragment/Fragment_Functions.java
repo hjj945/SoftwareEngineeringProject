@@ -10,12 +10,14 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.software_engineeringproject.R;
 
 public class Fragment_Functions extends Fragment {
 
     private Button btn1,btn2,btn3,btn4;
+    private Fragment_Chessbox fragment_chessbox=new Fragment_Chessbox();
 
     //重写构造函数，用于在调用Fragment时传递参数
     public static Fragment_Message newInstance(String data){
@@ -42,7 +44,8 @@ public class Fragment_Functions extends Fragment {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FragmentManager fm=getActivity().getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.User_fl_Container,fragment_chessbox).addToBackStack(null).commitAllowingStateLoss();
             }
         });
     }

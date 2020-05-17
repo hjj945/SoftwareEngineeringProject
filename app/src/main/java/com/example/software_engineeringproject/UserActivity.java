@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +31,8 @@ public class UserActivity extends AppCompatActivity {
 
     private Fragment currentFragment=new Fragment();
 
+    private String Id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,10 @@ public class UserActivity extends AppCompatActivity {
         fragment_contacts=new Fragment_Contacts();
         fragment_functions=new Fragment_Functions();
         fragment_chessbox=new Fragment_Chessbox();
+
+        Intent intent=getIntent();
+        Bundle bundle=intent.getExtras();
+        Id=bundle.getString("id");
 
         //getSupportFragmentManager().beginTransaction().add(R.id.User_fl_Container,Fragment_Message.newInstance("hello,world")).commitAllowingStateLoss();
         getSupportFragmentManager().beginTransaction().add(R.id.User_fl_Container, fragment_chessbox).commitAllowingStateLoss();
