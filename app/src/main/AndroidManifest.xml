@@ -18,6 +18,7 @@
         <activity android:name=".fragment.Fragment_Message"/>
         <activity android:name=".fragment.Fragment_Contacts"/>
         <activity android:name=".fragment.Fragment_Functions"/>
+        <activity android:name=".fragment.Fragment_Chessbox"/>
         <activity android:name=".UserActivity" />
         <activity android:name=".CreateAccountActivity" />
         <activity android:name=".MainActivity">

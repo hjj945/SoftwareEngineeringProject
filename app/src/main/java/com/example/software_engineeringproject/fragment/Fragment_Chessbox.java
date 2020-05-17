@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,9 +13,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.software_engineeringproject.R;
 
-public class Fragment_Functions extends Fragment {
+public class Fragment_Chessbox extends Fragment {
 
-    private Button btn1,btn2,btn3,btn4;
+    private TextView chessBox_tv1;
 
     //重写构造函数，用于在调用Fragment时传递参数
     public static Fragment_Message newInstance(String data){
@@ -29,7 +29,7 @@ public class Fragment_Functions extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_functions,container,false);
+        View view=inflater.inflate(R.layout.view_chessbox,container,false);
         return view;
     }
 
@@ -37,14 +37,9 @@ public class Fragment_Functions extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        btn1=view.findViewById(R.id.fragment_functions_btn1);
+        chessBox_tv1=view.findViewById(R.id.ChessBox_tv1);
+        chessBox_tv1.setText("测试棋盘");
 
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     @Override
@@ -56,5 +51,4 @@ public class Fragment_Functions extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
 }

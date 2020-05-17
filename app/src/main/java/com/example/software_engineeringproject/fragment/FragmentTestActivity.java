@@ -12,7 +12,8 @@ public class FragmentTestActivity extends AppCompatActivity {
 
     private Button fragmentChange_btn;
     private Fragment_test1 fragmentTest1;
-    //private Fragment_test2 fragmentTest2;@Override
+    //private Fragment_test2 fragmentTest2;
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_test);

@@ -16,6 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.software_engineeringproject.R;
+import com.example.software_engineeringproject.mySocket;
+
+import java.io.Serializable;
+import java.net.Socket;
 
 public class Fragment_test1 extends Fragment {
 
@@ -31,7 +35,14 @@ public class Fragment_test1 extends Fragment {
         Bundle bundle=new Bundle();
         bundle.putString("data",data);
         fragment_test.setArguments(bundle);
-        return  fragment_test;
+        return fragment_test;
+    }
+    public static Fragment_test1 newInstance(mySocket mysocket){
+        Fragment_test1 fragment_test=new Fragment_test1();
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("socket", (Serializable) mysocket);
+        fragment_test.setArguments(bundle);
+        return fragment_test;
     }
 
     @Nullable
@@ -40,7 +51,6 @@ public class Fragment_test1 extends Fragment {
         View view=inflater.inflate(R.layout.test1,container,false);
         return view;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

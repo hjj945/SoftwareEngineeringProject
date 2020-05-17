@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class mySocket {
@@ -32,14 +33,15 @@ public class mySocket {
     private BufferedReader bufReader;
     private InputStreamReader reader;
     private String s;
-
     public mySocket()
     {
         new Thread() {
             public void run(){
                 super.run();
                 try{
-                    socket = new Socket("84.32.16.105",12345);
+                    String host="84.32.16.105";
+                    //String host=InetAddress.getAllByName("iamhwj.f3322.net").toString();
+                    socket = new Socket(host,12345);
                     Log.e("socket","socket created");
                     os = socket.getOutputStream();
                 } catch (Exception e) {
