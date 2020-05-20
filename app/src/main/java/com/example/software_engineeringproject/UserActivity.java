@@ -54,11 +54,11 @@ public class UserActivity extends AppCompatActivity {
         Id=bundle.getString("id");
 
         //getSupportFragmentManager().beginTransaction().add(R.id.User_fl_Container,Fragment_Message.newInstance("hello,world")).commitAllowingStateLoss();
-        getSupportFragmentManager().beginTransaction().add(R.id.User_fl_Container, fragment_chessbox).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().add(R.id.User_fl_Container, Fragment_Contacts.newInstance(Id)).commitAllowingStateLoss();
         user_contacts_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.User_fl_Container, Fragment_Contacts.newInstance("Hello,World!")).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.User_fl_Container, Fragment_Contacts.newInstance(Id)).addToBackStack(null).commitAllowingStateLoss();
             }
         });
 
@@ -72,7 +72,7 @@ public class UserActivity extends AppCompatActivity {
         user_message_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.User_fl_Container, Fragment_Message.newInstance("Hello,World!")).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.User_fl_Container, Fragment_Message.newInstance(Id)).addToBackStack(null).commitAllowingStateLoss();
             }
         });
 

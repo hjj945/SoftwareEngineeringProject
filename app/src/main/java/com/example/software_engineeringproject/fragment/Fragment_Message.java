@@ -2,6 +2,9 @@ package com.example.software_engineeringproject.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.software_engineeringproject.R;
+import com.example.software_engineeringproject.depends;
+import com.example.software_engineeringproject.mySocket;
+
+import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class Fragment_Message extends Fragment {
 
@@ -21,8 +33,18 @@ public class Fragment_Message extends Fragment {
     private TextView fragment_message_tv2;
     private EditText fragment_message_et;
     private Button fragment_message_btn;
+    private String message;
 
+    private mySocket mysocket;
+    private depends dp;
     private String msg;
+    private String id;
+    private String target_id;
+
+    BufferedReader bufReader;
+    InputStreamReader reader;
+    String s;
+    InputStream is;
 
     //重写构造函数，用于在调用Fragment时传递参数
     public static Fragment_Message newInstance(String data){
@@ -55,15 +77,58 @@ public class Fragment_Message extends Fragment {
         }
 
         fragment_message_tv1.setText("消息");
-        /*
-        //更新消息
+
+        mysocket=new mySocket();
+        dp=new depends();
+        try {
+            msg=dp.Create_msg_for_client(1,"get_friends_info",id,null,null);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mysocket.send_msg(msg);
         new Thread(){
             public void run(){
                 super.run();
-
+                try{
+                    is=mysocket.receive_msg();
+                    //解析服务器返回的数据
+                    reader = new InputStreamReader(is);
+                    bufReader = new BufferedReader(reader);
+                    s = null;
+                    while((s = bufReader.readLine()) != null) {
+                        Log.e("socket", s);
+                        fragment_message_tv2.setText(s);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
-         */
+
+        fragment_message_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                message=s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        fragment_message_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
         @Override
         public void onAttach(@NonNull Context context) {

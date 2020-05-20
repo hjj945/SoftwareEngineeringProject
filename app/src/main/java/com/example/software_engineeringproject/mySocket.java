@@ -33,17 +33,20 @@ public class mySocket {
     private BufferedReader bufReader;
     private InputStreamReader reader;
     private String s;
+    public String id;
+    public String target_id;
     public mySocket()
     {
         new Thread() {
             public void run(){
                 super.run();
                 try{
-                    String host="84.32.16.105";
+                    String host="84.32.16.106";
                     //String host=InetAddress.getAllByName("iamhwj.f3322.net").toString();
                     socket = new Socket(host,12345);
                     Log.e("socket","socket created");
                     os = socket.getOutputStream();
+                    is = socket.getInputStream();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -57,6 +60,7 @@ public class mySocket {
                 super.run();
                 try{
                     Log.e("socket","sending message");
+                    Log.e( "socket sending ",msg );
                     os.write(msg.getBytes());
                     os.flush();
                 } catch (IOException e) {
@@ -67,7 +71,6 @@ public class mySocket {
     }
 
     public InputStream receive_msg() throws IOException {
-        is = socket.getInputStream();
         return is;
     }
 
@@ -77,11 +80,13 @@ public class mySocket {
                 super.run();
                 try {
                     Log.e("socket", "finish sending message");
-                    os.write("Finish".getBytes());
+                    os.write("{'type':'Finish'}".getBytes());
                     os.flush();
+                    /*
                     bufReader.close();
                     reader.close();
                     is.close();
+                     */
                     os.close();
                     socket.shutdownOutput();
                     socket.close();

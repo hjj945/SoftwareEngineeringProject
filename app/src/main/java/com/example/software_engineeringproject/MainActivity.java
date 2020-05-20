@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.software_engineeringproject.fragment.FragmentTestActivity;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private Button test_btn;
     private EditText Id_et;
     private EditText Password_et;
+    private TextView mainActivity_tv;
     //账号，密码
     private String Id;
     private String Password;
@@ -58,8 +60,10 @@ public class MainActivity extends AppCompatActivity {
         to_CreateAccount_btn=(Button)findViewById(R.id.to_CreateAccount_btn);
         Id_et=(EditText)findViewById(R.id.Id_et);
         Password_et=(EditText)findViewById(R.id.Password_et);
+        mainActivity_tv=findViewById(R.id.TV_1);
 
         dp=new depends();
+
 
         //socket测试
         new Thread() {
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 super.run();
                 try {
                     Log.e("socket", "start sending message");
-                    socket = new Socket("84.32.16.105", 12345);
+                    socket = new Socket("84.32.16.106", 12345);
                     os = socket.getOutputStream();
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
@@ -77,17 +81,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }.start();
 
+
+
         //Fragment测试界面
         test_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this, UserActivity.class);
                 Bundle bundle=new Bundle();
-                bundle.putString("id","123456");
+                bundle.putString("id","123");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
+
+
 
         //点击创建用户按钮后跳转至创建用户界面
         to_CreateAccount_btn.setOnClickListener(new View.OnClickListener() {
@@ -137,16 +145,17 @@ public class MainActivity extends AppCompatActivity {
         Start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 Intent intent=new Intent(MainActivity.this,UserActivity.class);
                 startActivity(intent);
-                /*
+                 */
                 new Thread() {
                     public void run(){
                         super.run();
                         Looper.prepare();
                         try {
                             Log.e("socket","sending message");
-                            Message=dp.Create_msg_for_client(1,"login_in",Id,null,Password);
+                            Message=dp.Create_msg_for_client(1,"login",Id,null,Password);
                             os.write(Message.getBytes());
                             os.flush();
                             is = socket.getInputStream();
@@ -156,15 +165,20 @@ public class MainActivity extends AppCompatActivity {
                             s = null;
                             while((s = bufReader.readLine()) != null) {
                                 Log.e("socket", s);
-                                if(s=="00"){
-                                    //Toast.makeText(getApplicationContext(),"用户不存在或密码错误!",Toast.LENGTH_SHORT).show();
-                                }else if(s=="01"){
-                                    //Toast.makeText(getApplicationContext(),"登陆成功!",Toast.LENGTH_SHORT).show();
+                                JSONObject jo=new JSONObject((new String(s)));
+                                String t=jo.getString("type");
+                                Log.e("type",t);
+                                if(t.equals("login_successful")){
+                                    mainActivity_tv.setText(t);
+                                    Log.e("flag ","flag" );
                                     Intent intent=new Intent(MainActivity.this,UserActivity.class);
                                     Bundle bundle=new Bundle();
                                     bundle.putString("id",Id);
                                     intent.putExtras(bundle);
                                     startActivity(intent);
+                                }else{
+                                    Log.e("flag2 ","flag2" );
+                                    mainActivity_tv.setText(t);
                                 }
                             }
                         } catch (UnknownHostException e) {
@@ -178,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }.start();
 
-                 */
             }
         });
 
@@ -197,23 +210,64 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
         new Thread(){
             public void run(){
                 super.run();
                 Log.e("socket", "finish sending message");
                 //关闭IO资源
                 try {
-                    os.write("Finish".getBytes());
+                    os.write("{'type':'Finish'}".getBytes());
+                    os.flush();
+
+                    bufReader.close();
+                    reader.close();
+                    is.close();
+                    os.close();
+                    socket.shutdownOutput();
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        new Thread(){
+            public void run(){
+                super.run();
+                Log.e("socket", "finish sending message");
+                //关闭IO资源
+                try {
+                    os.write("{'type':'Finish'}".getBytes());
+                    os.flush();
+
+                    bufReader.close();
+                    reader.close();
+                    is.close();
+                    os.close();
+                    socket.shutdownOutput();
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        /*
+        new Thread(){
+            public void run(){
+                super.run();
+                Log.e("socket", "finish sending message");
+                //关闭IO资源
+                try {
+                    os.write("{'type':'Finish'}".getBytes());
                     os.flush();
 
                     bufReader.close();
@@ -228,5 +282,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }.start();
 
+         */
     }
 }

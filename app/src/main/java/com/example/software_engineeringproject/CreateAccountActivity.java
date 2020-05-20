@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -85,13 +86,16 @@ public class CreateAccountActivity extends AppCompatActivity {
                             s = null;
                             while((s = bufReader.readLine()) != null) {
                                 Log.e("socket", s);
-                                if(s=="0"){
+                                JSONObject jo=new JSONObject((new String(s)));
+                                String t=jo.getString("type");
+                                Log.e("type",t);
+                                if(t=="0"){
                                     Toast.makeText(getApplicationContext(),"用户已经存在!",Toast.LENGTH_SHORT).show();
-                                }else if(s=="1"){
+                                }else if(t=="1"){
                                     Toast.makeText(getApplicationContext(),"用户创建成功!",Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        } catch (IOException e) {
+                        } catch (IOException | JSONException e) {
                             e.printStackTrace();
                         }
                         Looper.loop();

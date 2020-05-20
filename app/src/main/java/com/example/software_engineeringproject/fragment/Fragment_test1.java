@@ -37,6 +37,7 @@ public class Fragment_test1 extends Fragment {
         fragment_test.setArguments(bundle);
         return fragment_test;
     }
+
     public static Fragment_test1 newInstance(mySocket mysocket){
         Fragment_test1 fragment_test=new Fragment_test1();
         Bundle bundle=new Bundle();
