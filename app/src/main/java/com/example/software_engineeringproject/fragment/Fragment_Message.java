@@ -21,6 +21,7 @@ import com.example.software_engineeringproject.depends;
 import com.example.software_engineeringproject.mySocket;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,7 +40,8 @@ public class Fragment_Message extends Fragment {
     private depends dp;
     private String msg;
     private String id;
-    private String target_id;
+    private String target_id="7645";
+    private String message_box;
 
     BufferedReader bufReader;
     InputStreamReader reader;
@@ -71,25 +73,21 @@ public class Fragment_Message extends Fragment {
         fragment_message_et = view.findViewById(R.id.fragment_message_et);
         fragment_message_btn = view.findViewById(R.id.fragment_message_btn);
 
+        dp=new depends();
         if (getArguments() != null) {
-            msg = getArguments().getString("data");
-            fragment_message_tv2.setText(msg);
+            id = getArguments().getString("data");
         }
 
         fragment_message_tv1.setText("消息");
 
-        mysocket=new mySocket();
-        dp=new depends();
-        try {
-            msg=dp.Create_msg_for_client(1,"get_friends_info",id,null,null);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mysocket.send_msg(msg);
         new Thread(){
             public void run(){
                 super.run();
                 try{
+                    mysocket=new mySocket();
+                    Thread.sleep(1000);
+                    msg=dp.Create_msg_for_client(1,"update_message",id,null,null);
+                    mysocket.send_msg(msg);
                     is=mysocket.receive_msg();
                     //解析服务器返回的数据
                     reader = new InputStreamReader(is);
@@ -97,9 +95,12 @@ public class Fragment_Message extends Fragment {
                     s = null;
                     while((s = bufReader.readLine()) != null) {
                         Log.e("socket", s);
-                        fragment_message_tv2.setText(s);
+                        JSONObject jo=new JSONObject((new String(s)));
+                        String t=jo.getString("data");
+                        message_box=dp.show_message(t);
+                        fragment_message_tv2.setText(message_box);
                     }
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException | JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -125,7 +126,29 @@ public class Fragment_Message extends Fragment {
         fragment_message_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new Thread(){
+                    public void run(){
+                        super.run();
+                        try {
+                            msg=dp.Create_msg_for_client(1,"send_message",id,target_id,message);
+                            mysocket.send_msg(msg);
+                            is=mysocket.receive_msg();
+                            //解析服务器返回的数据
+                            reader = new InputStreamReader(is);
+                            bufReader = new BufferedReader(reader);
+                            s = null;
+                            while((s = bufReader.readLine()) != null) {
+                                Log.e("socket", s);
+                                JSONObject jo=new JSONObject((new String(s)));
+                                String t=jo.getString("data");
+                                message_box+=dp.show_message(t);
+                                fragment_message_tv2.setText(message_box);
+                            }
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
             }
         });
 
@@ -139,4 +162,5 @@ public class Fragment_Message extends Fragment {
         public void onDetach() {
             super.onDetach();
         }
+
 }

@@ -1,7 +1,7 @@
 package com.example.software_engineeringproject;
 /************************************************************************************************
  * 该类功能是作为网络传输接口
- * 1.初始化：mySocket xxx = new mySocket(address,port) address设置为84.32.16.105,port 设置为12345
+ * 1.初始化：mySocket xxx = new mySocket(address,port) address设置为84.32.16.106,port 设置为12345
  * 2.消息发送函数 send_msg. 使用方法：xxx.send_msg(message); message为需要发送的信息，类型为String
  * 3.消息接收函数 receive_msg 消息接收函数，返回一个InputStream对象。以下为示例：
  *                             is=mysocket.receive_msg();     //mysocket为之前创建的socket对象，此处接收inputstream对象is

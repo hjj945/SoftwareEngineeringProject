@@ -53,8 +53,8 @@ public class UserActivity extends AppCompatActivity {
         Bundle bundle=intent.getExtras();
         Id=bundle.getString("id");
 
-        //getSupportFragmentManager().beginTransaction().add(R.id.User_fl_Container,Fragment_Message.newInstance("hello,world")).commitAllowingStateLoss();
-        getSupportFragmentManager().beginTransaction().add(R.id.User_fl_Container, Fragment_Contacts.newInstance(Id)).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().add(R.id.User_fl_Container,Fragment_Message.newInstance("Id")).commitAllowingStateLoss();
+        //getSupportFragmentManager().beginTransaction().add(R.id.User_fl_Container, Fragment_Contacts.newInstance(Id)).commitAllowingStateLoss();
         user_contacts_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

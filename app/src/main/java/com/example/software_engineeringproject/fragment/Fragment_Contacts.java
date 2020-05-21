@@ -24,17 +24,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.software_engineeringproject.R;
-import com.example.software_engineeringproject.UserActivity;
 import com.example.software_engineeringproject.mySocket;
 import com.example.software_engineeringproject.depends;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 
 public class Fragment_Contacts extends Fragment {
 
@@ -42,6 +41,7 @@ public class Fragment_Contacts extends Fragment {
     private TextView fragment_contacts_tv2;
     private Button fragment_contacts_btn;
     private String id;
+    private String target_id;
     private String[] contacts_list={};
     private mySocket mysocket;
     private depends dp;
@@ -78,21 +78,7 @@ public class Fragment_Contacts extends Fragment {
         if(getArguments()!=null){
             id=getArguments().getString("data");
         }
-
         dp=new depends();
-        /*
-        try {
-            mysocket=new mySocket();
-            msg=dp.Create_msg_for_client(1,"get_friends_info",id,null,null);
-            Log.e( "onViewCreated: ",msg );
-            mysocket.send_msg(msg);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-         */
-
-
         fragment_contacts_tv.setText("好友列表");
 
         new Thread(){
@@ -102,7 +88,6 @@ public class Fragment_Contacts extends Fragment {
                     mysocket=new mySocket();
                     Thread.sleep(1000);
                     msg=dp.Create_msg_for_client(1,"get_friends_info",id,null,null);
-                    Log.e( "onViewCreated: ",msg);
                     mysocket.send_msg(msg);
                     s = null;
                     is=mysocket.receive_msg();
@@ -111,6 +96,11 @@ public class Fragment_Contacts extends Fragment {
                     bufReader = new BufferedReader(reader);
                     while((s = bufReader.readLine()) != null) {
                         Log.e("socket", s);
+                        JSONObject jo=new JSONObject((new String(s)));
+                        String t=jo.getString("data");
+                        //fragment_contacts_tv2.setText(t);
+                        fragment_contacts_tv2.setText(dp.function(t));
+                        Log.e("data", t);
                     }
                 } catch (JSONException | InterruptedException | IOException e) {
                     e.printStackTrace();
@@ -118,7 +108,7 @@ public class Fragment_Contacts extends Fragment {
             }
         }.start();
 
-        /*
+/*
         fragment_contacts_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,12 +117,10 @@ public class Fragment_Contacts extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.e( "onViewCreated: ",msg );
                 mysocket.send_msg(msg);
             }
         });
-
-         */
+*/
 
         /*
         final SpannableStringBuilder style =new SpannableStringBuilder();

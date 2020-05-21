@@ -1,5 +1,7 @@
 package com.example.software_engineeringproject;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +33,44 @@ public class depends {
         msg.put("data",data);
         String s=msg.toString();
         return s;
+    }
+
+    public String function(String s){
+       char[] t=s.toCharArray();
+       String result="";
+        for(int i=0;i<s.length();i++){
+            if (t[i]=='[' || t[i]==']'){
+
+            }else if(t[i]==','){
+                result+='\n';
+            }else {
+                result+=t[i];
+            }
+        }
+        Log.e("function: ",result );
+        return result;
+    }
+
+    public String show_message(String s){
+        String result="";
+        char[] t=s.toCharArray();
+        int flag=0;
+        for(int i=0;i<s.length();i++){
+            if (t[i]=='[' || t[i]==']'||t[i]==')'){
+
+            }else if(t[i]=='('){
+                result+="From";
+            }else if(t[i]==','&&flag==0){
+                result+=":";
+                flag=1;
+            }else if(t[i]==','&&flag==1){
+                result+='\n';
+                flag=0;
+            }else {
+                result+=t[i];
+            }
+        }
+        return result;
     }
 
 }

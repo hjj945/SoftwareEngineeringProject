@@ -101,8 +101,10 @@ public class MainActivity extends AppCompatActivity {
         to_CreateAccount_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 Intent intent=new Intent(MainActivity.this,CreateAccountActivity.class);
                 startActivity(intent);
+                 */
             }
         });
 
@@ -210,26 +212,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        new Thread(){
-            public void run(){
-                super.run();
-                Log.e("socket", "finish sending message");
-                //关闭IO资源
-                try {
-                    os.write("{'type':'Finish'}".getBytes());
-                    os.flush();
 
-                    bufReader.close();
-                    reader.close();
-                    is.close();
-                    os.close();
-                    socket.shutdownOutput();
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
     }
 
     @Override
